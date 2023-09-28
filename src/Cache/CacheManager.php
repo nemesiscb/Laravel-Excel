@@ -40,11 +40,12 @@ class CacheManager extends Manager
      */
     public function createMemoryDriver(): CacheInterface
     {
-        if (!InstalledVersions::satisfies(new VersionParser, 'psr/simple-cache', '^3.0')) {
+        // 2023-09-28 fix errore deploy google appengine (In CacheManager.php line 43: Class 'Composer\InstalledVersions' not found)
+        // if (!InstalledVersions::satisfies(new VersionParser, 'psr/simple-cache', '^3.0')) {
             return new MemoryCacheDeprecated(
                 config('excel.cache.batch.memory_limit', 60000)
             );
-        }
+        // }
 
         return new MemoryCache(
             config('excel.cache.batch.memory_limit', 60000)
@@ -56,12 +57,12 @@ class CacheManager extends Manager
      */
     public function createBatchDriver(): CacheInterface
     {
-        if (!InstalledVersions::satisfies(new VersionParser, 'psr/simple-cache', '^3.0')) {
+        // if (!InstalledVersions::satisfies(new VersionParser, 'psr/simple-cache', '^3.0')) {
             return new BatchCacheDeprecated(
                 $this->createIlluminateDriver(),
                 $this->createMemoryDriver()
             );
-        }
+        // }
 
         return new BatchCache(
             $this->createIlluminateDriver(),
